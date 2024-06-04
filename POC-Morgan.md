@@ -24,8 +24,6 @@ npm init -y
 
 ```
 
-
-
 Step 2: Install Express and Morgan
 Next, install the Express and Morgan packages:
 
@@ -36,8 +34,7 @@ npm install express morgan
 ```
 
 Step 3: Create the Server File
-Create a new file named ‘index.js’  in your project directory. This file will contain the Express server setup and Morgan configuration.
-
+Create a new file named ‘index.js’ in your project directory. This file will contain the Express server setup and Morgan configuration.
 
 # Implementation
 
@@ -57,7 +54,7 @@ app.use(morgan(‘dev’));
 
 //routes
 app.get(‘/’, (req, res) => {
-res.send(‘Hello World’)};
+res.send(‘Hello World’)});
 
 //assigning port
 app.listen(5000, () => {console.log(‘Server is running on port 5000’)});
@@ -76,19 +73,17 @@ Common Formats
 'tiny': Minimal output.
 
 ```js
-
 //Using 'combined' format
-app.use(morgan('combined'))
+app.use(morgan("combined"));
 
 // Using 'common' format
-app.use(morgan('common'));
+app.use(morgan("common"));
 
-// Using 'short' format 
-app.use(morgan('short')); 
+// Using 'short' format
+app.use(morgan("short"));
 
-// Using 'tiny' format 
-app.use(morgan('tiny'));
-
+// Using 'tiny' format
+app.use(morgan("tiny"));
 ```
 
 Custom Format
@@ -96,20 +91,21 @@ Custom Format
 You can create a custom format by providing a format string or a function.
 
 ```js
-
 // Custom format string
-app.use(morgan(':method :url:status:res[content-length]- :response-time ms'));
+app.use(morgan(":method :url:status:res[content-length]- :response-time ms"));
 
 // Custom format function
-app.use(morgan((tokens, req, res) => { 
-return [ 
-tokens.method(req, res), 
-tokens.url(req, res), 
-tokens.status(req, res), 
-tokens['response-time'](req, res), 'ms' 
-].join(' '); 
-}));
-
+app.use(
+  morgan((tokens, req, res) => {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens["response-time"](req, res),
+      "ms",
+    ].join(" ");
+  })
+);
 ```
 
 # Using HTTP Methods
@@ -118,52 +114,82 @@ Here's a demonstration how to use Morgan with various HTTP methods:
 
 ```js
 
-const express = require('express'); 
-const morgan = require('morgan'); 
+const express = require(‘express’);
+const morgan = require(‘morgan’);
+const axios = require("axios");
 
-const app = express(); 
+const const app = express();
+const port = 8000;
 
-// Use Morgan middleware 
-app.use(morgan('dev')); 
+//Middleware
+app.use(express.json());
 
-// Define routes for different HTTP methods 
-app.get('/resource', (req, res) => { 
-   //We can write logic for the request here
-   res.send('GET request to the resource'); 
-}); 
+// Use Morgan middleware
+app.use(morgan("tiny"));
 
-app.post('/resource', (req, res) => { 
-//We can write logic for the request here
-res.send('POST request to the resource'); 
-}); 
+// GET route
+app.get("/users", async (req, res) => {
+  try {
+    const response = await axios.get(apiUrl);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
-app.put('/resource', (req, res) => { 
-res.send('PUT request to the resource'); 
-}); 
+// Get route for single user
+app.get("/users/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await axios(`${apiUrl}/${id}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
+// POST route
+app.post("/users", async (req, res) => {
+  try {
+    const newUser = req.body;
+    const response = await axios.post(apiUrl, newUser);
+    res.status(201).json(response.data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
+// PUT route
+app.put("/users/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedUser = req.body;
+    const response = await axios.put(`${apiUrl}/${id}`, updatedUser);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
-app.delete('/resource', (req, res) => { 
-//We can write logic for the request here
-res.send('DELETE request to the resource'); 
-}); 
-
-app.patch('/resource', (req, res) => { 
-//We can write logic for the request here
-res.send('PATCH request to the resource'); 
-}); 
-
+// DELETE route
+app.delete("/users/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await axios.delete(`${apiUrl}/${id}`);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 //Assigning port to server
- app.listen(3000, () => { 
-console.log('Server is running on port 3000'); 
+app.listen(port, () => {
+  console.log(`Server is listening to port ${port}`);
 });
 
 ```
 
-
 Try this code in your code editor (Visual Studio). And try with all logging formats provided ans see the outputs, this will helps you in monitoring and debugging.
-
 
 # Summary
 
