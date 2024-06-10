@@ -2,7 +2,7 @@
 
 # Introduction
 
-Morgan is a popular HTTP request logger middleware for Node.js. It simplifies logging requests to the console or a file, making it easier to debug and monitor web applications. Morgan provides various logging formats, supports custom formats, and can log requests to a file. This documentation provides an overview of Morgan, including installation, setup, and examples of using different logging formats. It also includes a scenario demonstrating the use of all HTTP methods.
+Morgan is a popular HTTP request logger middleware for Node.js. It simplifies logging requests to the console, making it easier to debug and monitor web applications. Morgan provides various logging formats, supports custom formats. This documentation provides an overview of Morgan, including installation, setup, and examples of using different logging formats. It also includes a scenario demonstrating the use of all HTTP methods.
 
 # Requirements
 
@@ -29,7 +29,7 @@ Next, install the Express and Morgan packages:
 
 ```bash
 
-npm install express morgan
+npm install express morgan axios
 
 ```
 
@@ -120,6 +120,8 @@ const axios = require("axios");
 
 const const app = express();
 const port = 8000;
+
+const apiUrl = "https://ravirajnavale-mock-server-app.onrender.com/users";
 
 //Middleware
 app.use(express.json());
